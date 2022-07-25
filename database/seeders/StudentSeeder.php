@@ -16,8 +16,11 @@ class StudentSeeder extends Seeder
     public function run()
     { 
         $school = School::inRandomOrder()->first();
+        $student_order = Student::where('school_id', $school->id)->value('order');
+        
         Student::factory()->create([
-            'school_id' => $school->id
+            'school_id' => $school->id,
+            'order' => $student_order + 1
         ]);
     }
 }

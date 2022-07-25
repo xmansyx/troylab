@@ -18,7 +18,6 @@ class StudentFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'school_id' => School::factory(),
-            'order' => $this->faker->numberBetween(1,20),
         ];
     }
 
