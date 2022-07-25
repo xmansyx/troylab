@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\SchoolsController;
+use App\Http\Controllers\Admin\StudentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resources([
+    'admin/students' => StudentsController::class,
+    'admin/schools' => SchoolsController::class
+]);
