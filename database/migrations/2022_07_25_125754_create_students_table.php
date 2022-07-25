@@ -15,11 +15,13 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('schoole_id');
+            $table->string('name');
+            $table->unsignedBigInteger('school_id');
             $table->unsignedInteger('order');
             $table->timestamps();
 
-            $table->foreign('schoole_id')->references('id')->on('schools');
+            $table->foreign('school_id')->references('id')->on('schools');
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 
