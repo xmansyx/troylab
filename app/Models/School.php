@@ -22,4 +22,13 @@ class School extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (School $school) {
+            $school->students->each->delete();
+        });
+    }
 }

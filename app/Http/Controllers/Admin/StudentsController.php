@@ -22,9 +22,9 @@ class StudentsController extends Controller
 
     {
 
-        $students = Student::latest('order')->with('school')->paginate(10);
+        $students = Student::latest('order')->with('school')->paginate(20);
 
-        return view('students.index', compact('students'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('students.index', compact('students'))->with('i', (request()->input('page', 1) - 1) * 20);
 
     }
 

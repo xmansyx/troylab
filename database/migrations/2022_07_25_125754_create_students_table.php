@@ -20,7 +20,7 @@ class CreateStudentsTable extends Migration
             $table->unsignedInteger('order');
             $table->timestamps();
 
-            $table->foreign('school_id')->references('id')->on('schools');
+            $table->foreign('school_id')->references('id')->on('schools')->constrained()->onDelete('cascade');
             $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }

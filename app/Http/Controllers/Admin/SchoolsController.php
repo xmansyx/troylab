@@ -21,13 +21,11 @@ class SchoolsController extends Controller
 
     {
 
-        $schools = School::latest()->paginate(5);
+        $schools = School::latest()->paginate(20);
 
     
 
-        return view('schools.index',compact('schools'))
-
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('schools.index',compact('schools'))->with('i', (request()->input('page', 1) - 1) * 20);
 
     }
 
@@ -73,19 +71,11 @@ class SchoolsController extends Controller
 
             'name' => 'required',
 
-            'detail' => 'required',
-
         ]);
-
-    
 
         School::create($request->all());
 
-     
-
-        return redirect()->route('schools.index')
-
-                        ->with('success','school created successfully.');
+        return redirect()->route('schools.index')->with('success','school created successfully.');
 
     }
 
@@ -107,7 +97,7 @@ class SchoolsController extends Controller
 
     {
 
-        return view('schools.show',compact('school'));
+        return view('schools.show', compact('school'));
 
     } 
 
@@ -129,7 +119,7 @@ class SchoolsController extends Controller
 
     {
 
-        return view('schools.edit',compact('school'));
+        return view('schools.edit', compact('school'));
 
     }
 
@@ -157,19 +147,11 @@ class SchoolsController extends Controller
 
             'name' => 'required',
 
-            'detail' => 'required',
-
         ]);
-
-    
 
         $school->update($request->all());
 
-    
-
-        return redirect()->route('schools.index')
-
-                        ->with('success','school updated successfully');
+        return redirect()->route('schools.index')->with('success','school updated successfully');
 
     }
 
@@ -193,11 +175,7 @@ class SchoolsController extends Controller
 
         $school->delete();
 
-    
-
-        return redirect()->route('schools.index')
-
-                        ->with('success','school deleted successfully');
+        return redirect()->route('schools.index')->with('success','school deleted successfully');
 
     }
 }
