@@ -3,51 +3,31 @@
 namespace App\Http\API\V1\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentsController extends Controller
 {
-       /**
+    /**
 
-     * Display a listing of the resource.
+    * return a listing of the resource.
 
-     *
+    *
 
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\Response
 
-     */
+    */
 
     public function index()
 
     {
 
-        $products = Student::latest()->paginate(5);
+        $students = Student::latest('order')->with('school')->paginate(20);
 
-        return view('students.index',compact('students'))->with('i', (request()->input('page', 1) - 1) * 5);
-
-    }
-
-     
-
-    /**
-
-     * Show the form for creating a new resource.
-
-     *
-
-     * @return \Illuminate\Http\Response
-
-     */
-
-    public function create()
-
-    {
-
-        return view('students.create');
+        return response()->json($students);
 
     }
-
     
 
     /**
@@ -69,14 +49,19 @@ class StudentsController extends Controller
         $request->validate([
 
             'name' => 'required',
-
-            'detail' => 'required',
+            'school_id' => 'required',
 
         ]);
 
-        Student::create($request->all());
+        $latest_student_for_school = Student::where('school_id', $request->school_id)->latest()->first();
 
-        return redirect()->route('students.index')->with('success','student created successfully.');
+        Student::create([
+            'name' => $request->name,
+            'school_id' => $request->school_id,
+            'order' => $latest_student_for_school?  $latest_student_for_school->order + 1 : 1
+        ]);
+
+        return response()->json(['sucess' => 'student created successfully']);
 
     }
 
@@ -97,33 +82,9 @@ class StudentsController extends Controller
     public function show(Student $student)
 
     {
-
-        return view('students.show',compact('student'));
+        return response()->json($student);
 
     } 
-
-     
-
-    /**
-
-     * Show the form for editing the specified resource.
-
-     *
-
-     * @param  \App\Model\Student  $student
-
-     * @return \Illuminate\Http\Response
-
-     */
-
-    public function edit(student $student)
-
-    {
-
-        return view('students.edit',compact('student'));
-
-    }
-
     
 
     /**
@@ -147,18 +108,13 @@ class StudentsController extends Controller
         $request->validate([
 
             'name' => 'required',
-
-            'detail' => 'required',
+            'school_id' => 'required',
 
         ]);
 
-    
-
         $student->update($request->all());
 
-    
-
-        return redirect()->route('students.index')->with('success','student updated successfully');
+        return response()->json(['sucess' => 'student updated successfully']);
 
     }
 
@@ -182,9 +138,7 @@ class StudentsController extends Controller
 
         $student->delete();
 
-    
-
-        return redirect()->route('students.index')->with('success','student deleted successfully');
+        return response()->json(['sucess' => 'student deleted successfully']);
 
     }
 }
