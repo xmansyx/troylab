@@ -17,7 +17,7 @@ class UsersController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => ['wrong Email/password']
-            ], 404);
+            ], 401);
         }
     
             $token = $user->createToken('my-app-token')->plainTextToken;
@@ -27,6 +27,6 @@ class UsersController extends Controller
             'token' => $token
         ];
         
-        return response()->json($response, 201);
+        return response()->json($response, 200);
     }
 }
